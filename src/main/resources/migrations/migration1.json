@@ -1,0 +1,77 @@
+{
+    "topic_types": [
+        {
+            "value":            "Message",
+            "uri":              "ka2.comment.message",
+            "data_type_uri":    "dm4.core.text",
+            "index_mode_uris": ["dm4.core.fulltext", "dm4.core.fulltext_key"],
+            "view_config_topics": [
+                {
+                    "type_uri": "dm4.webclient.view_config",
+                    "childs": {
+                        "dm4.webclient.input_field_rows": 1,
+                        "dm4.webclient.show_in_create_menu": false
+                    }
+                }
+            ]
+        },
+        {
+            "value":            "Contact",
+            "uri":              "ka2.comment.contact",
+            "data_type_uri":    "dm4.core.text",
+            "index_mode_uris": ["dm4.core.fulltext", "dm4.core.fulltext_key"],
+            "view_config_topics": [
+                {
+                    "type_uri": "dm4.webclient.view_config",
+                    "childs": {
+                        "dm4.webclient.input_field_rows": 1,
+                        "dm4.webclient.show_in_create_menu": false
+                    }
+                }
+            ]
+        },
+        {
+            "value":            "Comment",
+            "uri":              "ka2.comment",
+            "data_type_uri":    "dm4.core.composite",
+            "assoc_defs": [
+                {
+                    "child_type_uri":         "ka2.comment.message",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "parent_cardinality_uri": "dm4.core.one",
+                    "assoc_type_uri":         "dm4.core.composition_def"
+                },
+                {
+                    "child_type_uri":         "ka2.comment.contact",
+                    "child_cardinality_uri":  "dm4.core.one",
+                    "parent_cardinality_uri": "dm4.core.one",
+                    "assoc_type_uri":         "dm4.core.composition_def"
+                }
+            ],
+            "view_config_topics": [
+                {
+                    "type_uri": "dm4.webclient.view_config",
+                    "childs": {
+                        "dm4.webclient.input_field_rows": 1,
+                        "dm4.webclient.show_in_create_menu": false
+                    }
+                }
+            ]
+        }
+    ],
+    "assoc_types": [
+        {
+            "value":            "Comment Assignment",
+            "uri":              "ka2.comment.assignment",
+            "data_type_uri":    "dm4.core.text",
+            "view_config_topics": [
+                {
+                    "type_uri": "dm4.webclient.view_config",
+                    "childs": {
+                        "dm4.webclient.color": "#ff9979"
+                    }
+                }
+            ]
+        }
+    ]
+}
