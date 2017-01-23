@@ -73,8 +73,10 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
             // Do user assignment
             Association userAssoc = createCommentToUsername(comment);
             workspaces.assignToWorkspace(userAssoc, getCommentsWorkspaceId());
+            log.info("Comment via \"" + accesscl.getUsername() + "\" succesfully created in Comments workspace");
         } else {
-            log.warning("Could not create comment cause: Requesting user is not a member of the Comments workspace.");
+            log.warning("Could not create comment cause: Requesting user ("
+                    + accesscl.getUsername() + ") is not a member of the Comments workspace.");
         }
         return comment;
     }
