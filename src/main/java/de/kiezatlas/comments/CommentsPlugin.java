@@ -16,7 +16,6 @@ import de.deepamehta.core.model.ChildTopicsModel;
 import de.deepamehta.core.model.TopicModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.workspaces.WorkspacesService;
-import de.kiezatlas.website.WebsiteService;
 import java.util.List;
 
 /**
@@ -34,7 +33,6 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
 
     @Inject private WorkspacesService workspaces;
     @Inject private AccessControlService accesscl;
-    @Inject private WebsiteService website;
     
     Topic workspace = null;
 

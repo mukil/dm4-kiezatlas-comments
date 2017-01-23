@@ -27,11 +27,6 @@
             <artifactId>dm48-kiezatlas</artifactId>
             <version>2.1.9-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>de.kiezatlas</groupId>
-            <artifactId>dm48-kiezatlas-website</artifactId>
-            <version>0.6-SNAPSHOT</version>
-        </dependency>
         <!-- DeepaMehta 4 Standard Plugins -->
         <dependency>
             <groupId>de.deepamehta</groupId>

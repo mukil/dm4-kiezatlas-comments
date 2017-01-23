@@ -10,6 +10,11 @@ This module is a DeepaMehta 4 plugin and it introduces
 It is generic in its design and thus can be used with many different topic types. It is mainly used by the [Kiezatlas Website](https://github.com/mukil/dm4-kiezatlas-website) and [Kiezatlas API](http://github.com/mukil/dm4-kiezatlas-famportal) plugins to receive and handle messages on places.
 
 
+### Usage & Development
+
+See and compare to the section on [usage and development in this README](https://github.com/mukil/dm4-kiezatlas-website#usage--development).
+
+
 License
 -------
 
