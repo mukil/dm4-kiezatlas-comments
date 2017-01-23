@@ -70,6 +70,9 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
             Association assignment = createCommentAssignment(topic, comment);
             // Do workspace assignment...
             assignCommentToWorkspace(comment, assignment);
+            // Do user assignment
+            Association userAssoc = createCommentToUsername(comment);
+            workspaces.assignToWorkspace(userAssoc, getCommentsWorkspaceId());
         } else {
             log.warning("Could not create comment cause: Requesting user is not a member of the Comments workspace.");
         }
@@ -89,6 +92,13 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
             workspaces.assignToWorkspace(contactTopic.getRelatingAssociation(), getCommentsWorkspaceId());
         }
         workspaces.assignToWorkspace(assignment, getCommentsWorkspaceId());
+    }
+    
+    private Association createCommentToUsername(Topic comment) {
+        Topic username = accesscl.getUsernameTopic();
+        return dm4.createAssociation(mf.newAssociationModel("dm4.core.association",
+                mf.newTopicRoleModel(username.getId(), "dm4.core.parent"),
+                mf.newTopicRoleModel(comment.getId(), "dm4.core.child")));
     }
     
     @Override
