@@ -50,7 +50,8 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
     }
 
     @Override
-    public void createComment(long topicId, String message, String contact) {
+    public Topic createComment(long topicId, String message, String contact) {
+        Topic comment = null;
         if (message == null || topicId == 0) {
             log.warning("Could not create comment due to empty comment message or missing topic id");
         } else if (isCommentsWorkspaceMember()) {
@@ -60,18 +61,19 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
             ChildTopicsModel model = mf.newChildTopicsModel();
             model.put(COMMENT_MESSAGE, message);
             // Optionally Add: Comment Contact
-            if (contact == null) {
+            if (contact != null) {
                 model.put(COMMENT_CONTACT, contact);   
             }
             // Create new Comment Topic and Assign it
             TopicModel topicModel = mf.newTopicModel(COMMENT, model);
-            Topic comment = dm4.createTopic(topicModel);
+            comment = dm4.createTopic(topicModel);
             Association assignment = createCommentAssignment(topic, comment);
             // Do workspace assignment...
             assignCommentToWorkspace(comment, assignment);
         } else {
-            log.warning("Could not create comment, requesting user is not a workspace member.");
+            log.warning("Could not create comment cause: Requesting user is not a member of the Comments workspace.");
         }
+        return comment;
     }
 
     private void assignCommentToWorkspace(Topic comment, Association assignment) {

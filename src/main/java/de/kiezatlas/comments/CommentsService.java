@@ -18,8 +18,8 @@ public interface CommentsService {
     static final String COMMENT_ASSIGNMENT          = "ka2.comment.assignment";
     
     // --- Comments API
-    
-    void createComment(long topicId, String message, String contact);
+
+    Topic createComment(long topicId, String message, String contact);
 
     List<RelatedTopic> getComments(long topicId);
 
