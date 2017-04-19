@@ -100,12 +100,7 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
                 mf.newTopicRoleModel(username.getId(), "dm4.core.parent"),
                 mf.newTopicRoleModel(comment.getId(), "dm4.core.child")));
     }
-    
-    @Override
-    public boolean isCommentsWorkspaceMember() {
-        return accesscl.isMember(accesscl.getUsername(), getCommentsWorkspaceId());
-    }
-    
+
     @Override
     public RelatedTopic getMessage(Topic comment) {
         return comment.getChildTopics().getTopicOrNull(COMMENT_MESSAGE);
@@ -116,17 +111,34 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
         return comment.getChildTopics().getTopicOrNull(COMMENT_CONTACT);
     }
 
-    private Association createCommentAssignment(Topic topic, Topic comment) {
-        return dm4.createAssociation(mf.newAssociationModel(COMMENT_ASSIGNMENT,
-                mf.newTopicRoleModel(topic.getId(), "dm4.core.parent"),
-                mf.newTopicRoleModel(comment.getId(), "dm4.core.child")));
-    }
-
-    private long getCommentsWorkspaceId() {
+    @Override
+    public long getCommentsWorkspaceId() {
         if (workspace == null) {
             workspace = dm4.getTopicByUri(COMMENTS_WORKSPACE_URI);
         }
         return workspace.getId();
+    }
+
+    @Override
+    public boolean isCommentsWorkspaceMember() {
+        return accesscl.isMember(accesscl.getUsername(), getCommentsWorkspaceId());
+    }
+
+    @Override
+    public boolean isCommentsWorkspaceMember(String username) {
+        return accesscl.isMember(username, getCommentsWorkspaceId());
+    }
+
+    /**
+     * Private helper to create a comment assignment. Returns assoc for custom workspace assignments.
+     * @param topic
+     * @param comment
+     * @return Association object representing the newly assigned comment.
+     */
+    private Association createCommentAssignment(Topic topic, Topic comment) {
+        return dm4.createAssociation(mf.newAssociationModel(COMMENT_ASSIGNMENT,
+                mf.newTopicRoleModel(topic.getId(), "dm4.core.parent"),
+                mf.newTopicRoleModel(comment.getId(), "dm4.core.child")));
     }
 
 }

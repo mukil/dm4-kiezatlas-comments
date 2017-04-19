@@ -31,4 +31,8 @@ public interface CommentsService {
     
     boolean isCommentsWorkspaceMember();
 
+    boolean isCommentsWorkspaceMember(String username);
+
+    long getCommentsWorkspaceId();
+
 }
