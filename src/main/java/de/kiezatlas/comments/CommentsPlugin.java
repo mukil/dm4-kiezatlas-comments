@@ -53,25 +53,7 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
         if (message == null || topicId == 0) {
             log.warning("Could not create comment due to empty comment message or missing topic id");
         } else if (isCommentsWorkspaceMember()) {
-            // Try to read topic with given id
-            Topic topic = dm4.getTopic(topicId);
-            // Create comment topic and assign it
-            ChildTopicsModel model = mf.newChildTopicsModel();
-            model.put(COMMENT_MESSAGE, message);
-            // Optionally Add: Comment Contact
-            if (contact != null) {
-                model.put(COMMENT_CONTACT, contact);   
-            }
-            // Create new Comment Topic and Assign it
-            TopicModel topicModel = mf.newTopicModel(COMMENT, model);
-            comment = dm4.createTopic(topicModel);
-            Association assignment = createCommentAssignment(topic, comment);
-            // Do workspace assignment...
-            assignCommentToWorkspace(comment, assignment);
-            // Do user assignment
-            Association userAssoc = createCommentToUsername(comment);
-            workspaces.assignToWorkspace(userAssoc, getCommentsWorkspaceId());
-            log.info("Comment via \"" + accesscl.getUsername() + "\" succesfully created in Comments workspace");
+            comment = doCreateComment(topicId, message, contact);
         } else {
             log.warning("Could not create comment cause: Requesting user ("
                     + accesscl.getUsername() + ") is not a member of the Comments workspace.");
@@ -79,7 +61,32 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
         return comment;
     }
 
+    private Topic doCreateComment(long topicId, String message, String contact) {
+        Topic comment = null;
+        // Try to read topic with given id
+        Topic topic = dm4.getTopic(topicId);
+        // Create comment topic and assign it
+        ChildTopicsModel model = mf.newChildTopicsModel();
+        model.put(COMMENT_MESSAGE, message);
+        // Optionally Add: Comment Contact
+        if (contact != null) {
+            model.put(COMMENT_CONTACT, contact);
+        }
+        // Create new Comment Topic and Assign it
+        TopicModel topicModel = mf.newTopicModel(COMMENT, model);
+        comment = dm4.createTopic(topicModel);
+        Association assignment = createCommentAssignment(topic, comment);
+        // Do workspace assignment...
+        assignCommentToWorkspace(comment, assignment);
+        // Do user assignment
+        Association userAssoc = createCommentToUsername(comment);
+        workspaces.assignToWorkspace(userAssoc, getCommentsWorkspaceId());
+        log.info("Comment via \"" + accesscl.getUsername() + "\" succesfully created in Comments workspace");
+        return comment;
+    }
+
     private void assignCommentToWorkspace(Topic comment, Association assignment) {
+        log.info("Moving new comment into \"Comments\" workspace");
         RelatedTopic messageTopic = getMessage(comment);
         RelatedTopic contactTopic = getContact(comment);
         // Assign comment and assignment to "Comments" workspace
@@ -92,6 +99,7 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
             workspaces.assignToWorkspace(contactTopic.getRelatingAssociation(), getCommentsWorkspaceId());
         }
         workspaces.assignToWorkspace(assignment, getCommentsWorkspaceId());
+        log.info("Moved new comment into \"Comments\" workspace");
     }
     
     private Association createCommentToUsername(Topic comment) {
@@ -121,11 +129,13 @@ public class CommentsPlugin extends PluginActivator implements CommentsService {
 
     @Override
     public boolean isCommentsWorkspaceMember() {
+        // ## use hasReadPermission as this is a confidential ws
         return accesscl.isMember(accesscl.getUsername(), getCommentsWorkspaceId());
     }
 
     @Override
     public boolean isCommentsWorkspaceMember(String username) {
+        // ### use hasReadPermission as this is a confidential ws
         return accesscl.isMember(username, getCommentsWorkspaceId());
     }
 
